@@ -1,1 +1,141 @@
 
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIGHTMARES — The First Incursion</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" onclick="scrollToSection('home')">
+      <span class="logo">☾</span>
+      <span>
+        <strong>NIGHTMARES</strong>
+        <small>The First Incursion</small>
+      </span>
+    </button>
+
+    <nav>
+      <button data-i18n="navHome" onclick="scrollToSection('home')">Accueil</button>
+      <button data-i18n="navRead" onclick="scrollToSection('read')">Lire</button>
+      <button data-i18n="navFiles" onclick="scrollToSection('files')">Dossiers</button>
+      <button data-i18n="navTimeline" onclick="scrollToSection('timeline')">Chronologie</button>
+      <button data-i18n="navAuthor" onclick="scrollToSection('author')">Auteur</button>
+    </nav>
+
+    <button id="langBtn" class="lang">English</button>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="heroText">
+        <p class="badge" data-i18n="badge">DOSSIER OUVERT • BOOK ONE</p>
+        <h1>NIGHTMARES</h1>
+        <h2>The First Incursion</h2>
+        <p class="lead" data-i18n="heroText">
+          Un garçon de quinze ans, une mémoire qui n’appartient pas à cette vie, et des histoires qui ouvrent des portes que personne ne sait refermer.
+        </p>
+        <div class="actions">
+          <button class="primary" data-i18n="readNow" onclick="scrollToSection('read')">Lire les chapitres</button>
+          <button class="secondary" data-i18n="openFiles" onclick="scrollToSection('files')">Ouvrir les dossiers</button>
+        </div>
+      </div>
+
+      <div class="systemCard">
+        <div class="systemHeader">
+          <span>SYSTEM LOG</span>
+          <span>✦</span>
+        </div>
+        <p class="mono">HOST IDENTIFIED: LUKE JEAN</p>
+
+        <div class="rose">
+          <div class="roseInner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+            <div class="core"></div>
+          </div>
+        </div>
+
+        <div class="signal">
+          <strong data-i18n="signal">Signal inconnu détecté</strong>
+          <p data-i18n="quote">“La ville est très douée pour prétendre que rien ne s’est passé.”</p>
+          <small data-i18n="quoteBy">— Luke Jean, carnet privé</small>
+        </div>
+      </div>
+    </section>
+
+    <section id="read" class="section">
+      <div class="sectionHead">
+        <p class="eyebrow" data-i18n="reader">LECTEUR</p>
+        <h2>Book One</h2>
+        <p data-i18n="readerIntro">
+          Les chapitres sont présentés comme des fichiers d’enquête.
+        </p>
+      </div>
+
+      <input id="search" class="search" placeholder="Chercher un chapitre, personnage, lieu..." />
+      <div id="chapters" class="cards"></div>
+    </section>
+
+    <section id="files" class="section">
+      <div class="sectionHead">
+        <p class="eyebrow" data-i18n="files">DOSSIERS CLASSIFIÉS</p>
+        <h2>Case Archive</h2>
+        <p data-i18n="filesIntro">
+          Les éléments centraux de l’histoire : personnes, lieux, phénomènes et indices.
+        </p>
+      </div>
+
+      <div id="dossiers" class="fileGrid"></div>
+    </section>
+
+    <section id="timeline" class="section timelineSection">
+      <div class="sectionHead center">
+        <p class="eyebrow" data-i18n="timeline">CHRONOLOGIE DES INCIDENTS</p>
+        <h2>Incident Chain</h2>
+        <p data-i18n="timelineIntro">
+          Une ligne du temps simple pour comprendre comment l’incursion commence.
+        </p>
+      </div>
+
+      <div id="timelineList" class="timeline"></div>
+    </section>
+
+    <section id="author" class="section aboutGrid">
+      <article class="aboutCard">
+        <p class="eyebrow" data-i18n="about">À PROPOS DU PROJET</p>
+        <h2>NIGHTMARES</h2>
+        <p data-i18n="aboutText">
+          NIGHTMARES est une fiction de cosmic horror et de super-héros, construite autour d’un principe dangereux : lorsqu’une histoire est assez profonde, elle peut devenir réelle.
+        </p>
+      </article>
+
+      <article class="aboutCard red">
+        <p class="eyebrow">MICHAEL JP</p>
+        <h2 data-i18n="author">Auteur</h2>
+        <p data-i18n="authorText">
+          Auteur du projet NIGHTMARES. Cette première version du site est pensée pour être publiée gratuitement sur GitHub Pages.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="footer">NIGHTMARES • The First Incursion • Site bilingue GitHub Pages</span>
+  </footer>
+
+  <div id="modal" class="modal hidden">
+    <div class="modalBox">
+      <button id="closeModal" class="close">×</button>
+      <p id="modalRoman" class="eyebrow"></p>
+      <h2 id="modalTitle"></h2>
+      <p id="modalSummary"></p>
+      <blockquote id="modalExcerpt"></blockquote>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
