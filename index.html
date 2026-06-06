@@ -5,7 +5,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NIGHTMARES — The First Incursion</title>
+
+  <meta name="description" content="NIGHTMARES — The First Incursion : une fiction de cosmic horror et de super-héros. Quand une histoire est assez profonde, elle peut devenir réelle." />
+  <meta name="author" content="Michael JP" />
+  <meta name="theme-color" content="#05060a" />
+
+  <!-- Open Graph / réseaux sociaux -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NIGHTMARES — The First Incursion" />
+  <meta property="og:description" content="Une fiction de cosmic horror et de super-héros. Quand une histoire est assez profonde, elle peut devenir réelle." />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%98%BE%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -25,7 +40,7 @@
       <button data-i18n="navAuthor" onclick="scrollToSection('author')">Auteur</button>
     </nav>
 
-    <button id="langBtn" class="lang">English</button>
+    <button id="langBtn" class="lang" aria-label="Changer de langue">English</button>
   </header>
 
   <main>
@@ -75,7 +90,8 @@
         </p>
       </div>
 
-      <input id="search" class="search" placeholder="Chercher un chapitre, personnage, lieu..." />
+      <label for="search" class="srOnly">Chercher un chapitre</label>
+      <input id="search" class="search" type="search" autocomplete="off" placeholder="Chercher un chapitre, personnage, lieu..." />
       <div id="chapters" class="cards"></div>
     </section>
 
@@ -126,16 +142,14 @@
     <span data-i18n="footer">NIGHTMARES • The First Incursion • Site bilingue GitHub Pages</span>
   </footer>
 
-  <div id="modal" class="modal hidden">
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modalBox">
-      <button id="closeModal" class="close">×</button>
+      <button id="closeModal" class="close" aria-label="Fermer">×</button>
       <p id="modalRoman" class="eyebrow"></p>
       <h2 id="modalTitle"></h2>
       <p id="modalSummary"></p>
       <blockquote id="modalExcerpt"></blockquote>
     </div>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
