@@ -230,7 +230,22 @@ const timelineItems = [
   }
 ];
 
-let currentLang = "fr";
+let currentLang = localStorage.getItem("nightmares-lang") === "en" ? "en" : "fr";
+
+// Références DOM mises en cache (évite les requêtes répétées)
+const el = {
+  search: document.getElementById("search"),
+  chapters: document.getElementById("chapters"),
+  dossiers: document.getElementById("dossiers"),
+  timeline: document.getElementById("timelineList"),
+  langBtn: document.getElementById("langBtn"),
+  modal: document.getElementById("modal"),
+  modalRoman: document.getElementById("modalRoman"),
+  modalTitle: document.getElementById("modalTitle"),
+  modalSummary: document.getElementById("modalSummary"),
+  modalExcerpt: document.getElementById("modalExcerpt"),
+  closeModal: document.getElementById("closeModal")
+};
 
 function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -240,17 +255,16 @@ function applyTranslations() {
   const t = translations[currentLang];
   document.documentElement.lang = currentLang;
 
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const key = el.getAttribute("data-i18n");
-    if (t[key]) el.textContent = t[key];
+  document.querySelectorAll("[data-i18n]").forEach(node => {
+    const key = node.getAttribute("data-i18n");
+    if (t[key]) node.textContent = t[key];
   });
 
-  const search = document.getElementById("search");
-  if (search) {
-    search.placeholder = t.searchPlaceholder;
+  if (el.search) {
+    el.search.placeholder = t.searchPlaceholder;
   }
 
-  document.getElementById("langBtn").textContent = t.langBtn;
+  el.langBtn.textContent = t.langBtn;
 
   renderChapters();
   renderDossiers();
@@ -258,31 +272,32 @@ function applyTranslations() {
 }
 
 function renderChapters() {
-  const search = document.getElementById("search");
-  const q = search ? search.value.trim().toLowerCase() : "";
-  const wrap = document.getElementById("chapters");
+  const q = el.search ? el.search.value.trim().toLowerCase() : "";
+  const wrap = el.chapters;
   const t = translations[currentLang];
 
-  const filtered = chapters.filter(ch => {
-    const text = [
-      ch.roman,
-      ch.title.fr,
-      ch.title.en,
-      ch.tag.fr,
-      ch.tag.en,
-      ch.summary.fr,
-      ch.summary.en
-    ].join(" ").toLowerCase();
+  const filtered = chapters
+    .map((ch, index) => ({ ch, index }))
+    .filter(({ ch }) => {
+      const text = [
+        ch.roman,
+        ch.title.fr,
+        ch.title.en,
+        ch.tag.fr,
+        ch.tag.en,
+        ch.summary.fr,
+        ch.summary.en
+      ].join(" ").toLowerCase();
 
-    return text.includes(q);
-  });
+      return text.includes(q);
+    });
 
   if (!filtered.length) {
     wrap.innerHTML = `<p class="chapterCard">${t.noResults}</p>`;
     return;
   }
 
-  wrap.innerHTML = filtered.map(ch => `
+  wrap.innerHTML = filtered.map(({ ch, index }) => `
     <article class="chapterCard">
       <div class="chapterTop">
         <span>${ch.roman}</span>
@@ -290,13 +305,13 @@ function renderChapters() {
       </div>
       <h3>${ch.title[currentLang]}</h3>
       <p>${ch.summary[currentLang]}</p>
-      <button class="readBtn" onclick="openChapter(${chapters.indexOf(ch)})">${t.readExcerpt}</button>
+      <button class="readBtn" data-chapter="${index}">${t.readExcerpt}</button>
     </article>
   `).join("");
 }
 
 function renderDossiers() {
-  const wrap = document.getElementById("dossiers");
+  const wrap = el.dossiers;
 
   wrap.innerHTML = dossiers.map(item => `
     <article class="fileCard">
@@ -309,7 +324,7 @@ function renderDossiers() {
 }
 
 function renderTimeline() {
-  const wrap = document.getElementById("timelineList");
+  const wrap = el.timeline;
 
   wrap.innerHTML = timelineItems.map(item => `
     <article class="timelineItem">
@@ -322,29 +337,44 @@ function renderTimeline() {
 
 function openChapter(index) {
   const ch = chapters[index];
+  if (!ch) return;
 
-  document.getElementById("modalRoman").textContent = ch.roman;
-  document.getElementById("modalTitle").textContent = ch.title[currentLang];
-  document.getElementById("modalSummary").textContent = ch.summary[currentLang];
-  document.getElementById("modalExcerpt").textContent = `“${ch.excerpt[currentLang]}”`;
+  el.modalRoman.textContent = ch.roman;
+  el.modalTitle.textContent = ch.title[currentLang];
+  el.modalSummary.textContent = ch.summary[currentLang];
+  el.modalExcerpt.textContent = `“${ch.excerpt[currentLang]}”`;
 
-  document.getElementById("modal").classList.remove("hidden");
+  el.modal.classList.remove("hidden");
 }
 
-document.getElementById("langBtn").addEventListener("click", () => {
+function closeModal() {
+  el.modal.classList.add("hidden");
+}
+
+el.langBtn.addEventListener("click", () => {
   currentLang = currentLang === "fr" ? "en" : "fr";
+  localStorage.setItem("nightmares-lang", currentLang);
   applyTranslations();
 });
 
-document.getElementById("search").addEventListener("input", renderChapters);
+el.search.addEventListener("input", renderChapters);
 
-document.getElementById("closeModal").addEventListener("click", () => {
-  document.getElementById("modal").classList.add("hidden");
+// Délégation d'événements : un seul écouteur pour tous les boutons de chapitre
+el.chapters.addEventListener("click", event => {
+  const btn = event.target.closest("[data-chapter]");
+  if (btn) openChapter(Number(btn.dataset.chapter));
 });
 
-document.getElementById("modal").addEventListener("click", event => {
-  if (event.target.id === "modal") {
-    document.getElementById("modal").classList.add("hidden");
+el.closeModal.addEventListener("click", closeModal);
+
+el.modal.addEventListener("click", event => {
+  if (event.target === el.modal) closeModal();
+});
+
+// Fermeture du modal avec la touche Échap
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && !el.modal.classList.contains("hidden")) {
+    closeModal();
   }
 });
 
